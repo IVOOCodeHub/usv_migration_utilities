@@ -1,0 +1,51 @@
+$fontColorPrimary: #36395a;
+
+$colorPrimary: #fffff4;
+$colorSecondary: #36395a;
+$colorTertiary: #367af6;
+
+$detailsFicheBackgroundColor: #ffc164;
+$objectionBackgroundColor: #ecbfbf;
+
+$tabletteBreakpoint: 720px;
+$desktopBreakpoint: 1440px;
+
+// "fiche" types primary colors
+$alreadyCalled: #ffffff;
+$neverCalled: #ffffff;
+$recycled: #ffffff;
+$client: #7d262d;
+
+// "fiche" types background colors
+$alreadyCalledBackground: linear-gradient(
+  35deg,
+  lighten($alreadyCalled, 30%),
+  $alreadyCalled
+);
+
+$neverCalledBackground: linear-gradient(
+  35deg,
+  lighten($neverCalled, 30%),
+  $neverCalled
+);
+
+$recycledBackground: linear-gradient(35deg, lighten($recycled, 30%), $recycled);
+$clientBackground: linear-gradient(35deg, lighten($client, 30%), $client);
+
+$detailsFicheBackground: linear-gradient(
+  35deg,
+  lighten($detailsFicheBackgroundColor, 15%),
+  $detailsFicheBackgroundColor
+);
+
+$objectionBackground: linear-gradient(
+  35deg,
+  lighten($objectionBackgroundColor, 15%),
+  $objectionBackgroundColor
+);
+
+$greenGradient: linear-gradient(180deg, #00cc66 0%, #009449 100%);
+$buttonGreenGradient: linear-gradient(180deg, #00af59 0%, #00783b 200%);
+
+$greyGradient: linear-gradient(180deg, #6e6e6e 0%, #575757 100%);
+$buttonGreyGradient: linear-gradient(180deg, #6e6e6e 0%, #575757 200%);

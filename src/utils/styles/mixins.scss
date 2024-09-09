@@ -1,0 +1,207 @@
+@use './variables' as vars;
+
+@mixin landingSections {
+  min-height: 60dvh;
+  max-height: 60dvh;
+  background: #fffff4;
+  display: flex;
+  flex-flow: column;
+  gap: 0.5em;
+  padding: 0.5em;
+  justify-content: space-around;
+  align-items: center;
+}
+
+@mixin button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  font-size: 1em;
+  border-radius: 6px;
+  border: none;
+  color: #fff;
+  background: linear-gradient(180deg, #4b91f7 0%, #367af6 100%);
+  background-origin: border-box;
+  box-shadow:
+    0 0.5px 1.5px rgba(54, 122, 246, 0.25),
+    inset 0 0.8px 0 -0.25px rgba(255, 255, 255, 0.2);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:focus {
+    box-shadow:
+      inset 0 0.8px 0 -0.25px rgba(255, 255, 255, 0.2),
+      0 0.5px 1.5px rgba(54, 57, 90, 0.8),
+      0 0 0 3.5px rgba(23, 24, 39, 0.8);
+    outline: 0;
+  }
+}
+
+@mixin whiteButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: #3d3d3d;
+  background: #fff;
+  border: none;
+  box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:focus {
+    box-shadow:
+      0 0.5px 1px rgba(0, 0, 0, 0.1),
+      0 0 0 3.5px rgba(58, 108, 217, 0.5);
+    outline: 0;
+  }
+}
+
+@mixin greyButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: none;
+
+  background: #6e6d70;
+  box-shadow:
+    0 0.5px 1px rgba(0, 0, 0, 0.1),
+    inset 0 0.5px 0.5px rgba(255, 255, 255, 0.5),
+    0 0 0 0.5px rgba(0, 0, 0, 0.12);
+  color: #dfdedf;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+
+  &:focus {
+    box-shadow:
+      inset 0 0.8px 0px -0.25px rgba(255, 255, 255, 0.2),
+      0px 0.5px 1px rgba(0, 0, 0, 0.1),
+      0px 0px 0px 3.5px rgba(58, 108, 217, 0.5);
+    outline: 0;
+  }
+}
+
+@mixin crimsonButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  font-size: 1em;
+  border-radius: 6px;
+  border: none;
+  color: #fff;
+  background: linear-gradient(180deg, #da033b 0%, #b10303 100%);
+  background-origin: border-box;
+  box-shadow:
+    0 0.5px 1.5px rgb(177, 3, 3),
+    inset 0 0.8px 0 -0.25px rgba(255, 255, 255, 0.2);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:focus {
+    box-shadow:
+      inset 0 0.8px 0 -0.25px rgba(255, 255, 255, 0.2),
+      0 0.5px 1.5px rgb(177, 3, 3),
+      0 0 0 3.5px rgb(177, 3, 50);
+    outline: 0;
+  }
+}
+
+@mixin redButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  font-size: 1em;
+  border-radius: 6px;
+  border: none;
+  color: #fff;
+  background: linear-gradient(180deg, #fd0b41 0%, #ff0000 100%);
+  background-origin: border-box;
+  box-shadow:
+    0 0.5px 1.5px rgb(255, 0, 0),
+    inset 0 0.8px 0 -0.25px rgba(255, 255, 255, 0.2);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:focus {
+    box-shadow:
+      inset 0 0.8px 0 -0.25px rgba(255, 255, 255, 0.2),
+      0 0.5px 1.5px rgb(255, 0, 0),
+      0 0 0 3.5px rgb(253, 11, 65);
+    outline: 0;
+  }
+}
+
+@mixin tableContainer {
+  width: 100%;
+  max-height: 50dvh;
+  overflow-y: scroll;
+  box-shadow:
+    rgba(0, 0, 0, 0.4) 0 2px 4px,
+    rgba(0, 0, 0, 0.3) 0 7px 13px -3px,
+    rgba(0, 0, 0, 0.2) 0 -3px 0 inset;
+
+  & table {
+    width: 100%;
+    overflow-y: auto;
+    border-collapse: collapse;
+    background: #f1f1f1;
+
+    & th {
+      background: #36395a;
+      color: #ffffff;
+      font-size: 1.2dvw;
+      position: sticky;
+      top: 0;
+    }
+
+    & th,
+    & td {
+      padding: 0.5em;
+      text-align: center;
+    }
+
+    & td:hover {
+      cursor: pointer !important;
+    }
+
+    & tr:hover {
+      background: #36395a;
+    }
+
+    & tr:hover td,
+    & tr:hover th {
+      color: #ffffff;
+    }
+
+    & tr th:last-child {
+      //width: 40%;
+    }
+  }
+}

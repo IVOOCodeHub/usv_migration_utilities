@@ -1,0 +1,24 @@
+#home {
+  min-height: 80dvh;
+  transition: all 0.3s ease-in-out;
+}
+
+.formOpen {
+  transition: all 0.3s ease-in-out;
+  background: #cccccc;
+}
+
+#home .homeContent {
+  min-height: 70dvh;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#home h2 {
+  margin: 0 auto;
+  text-align: center;
+  width: 810px;
+  line-height: 2em;
+}

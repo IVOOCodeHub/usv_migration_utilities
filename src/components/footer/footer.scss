@@ -1,0 +1,25 @@
+@use '../../utils/styles/variables' as vars;
+@use '../../utils/styles/mixins' as mixins;
+
+#footer {
+  max-height: 10dvh;
+  min-height: 10dvh;
+  background: vars.$colorSecondary;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#footer figure {
+  width: 100px;
+}
+
+#footer img {
+  width: 100%;
+}
+
+#footer p {
+  color: white;
+  font-size: 1em;
+}

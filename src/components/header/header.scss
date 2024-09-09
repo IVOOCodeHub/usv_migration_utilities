@@ -1,0 +1,39 @@
+#header {
+  min-height: 10dvh;
+  max-height: 10dvh;
+  border-bottom: 1px solid black;
+  padding: 0 2em;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+
+#header figure {
+  width: 150px;
+}
+
+#header figure img {
+  width: 100%;
+}
+
+#header h1 {
+  width: 100%;
+  margin-left: -150px;
+  text-align: center;
+  font-size: 1.8em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#header .buttonWrapper {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  font-size: 1.6em;
+}
+
+#header .buttonWrapper span {
+  cursor: pointer;
+}
