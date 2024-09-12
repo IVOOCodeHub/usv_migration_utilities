@@ -9,7 +9,7 @@ export class UserService {
     this.postUserEndpoint = "http://192.168.0.112/Public/script_tlv_v14/getTOIdent.php";
   }
 
-  async getUser(userMatricule: IUserCredentials["matricule"]) {
+  async getUser(userMatricule: IUserCredentials["userID"]) {
     const response = await fetch(this.postUserEndpoint, {
       method: "POST",
       headers: {

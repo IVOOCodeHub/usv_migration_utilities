@@ -9,11 +9,12 @@
 }
 
 #home .homeContent {
-  min-height: 70dvh;
+  min-height: 80dvh;
   display: flex;
   flex-flow: column;
   align-items: center;
   justify-content: center;
+  gap: 1em;
 }
 
 #home h2 {

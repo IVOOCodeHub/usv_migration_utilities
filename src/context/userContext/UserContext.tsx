@@ -43,7 +43,7 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
     if (matricule) {
       const request = await userService.getUser(matricule);
       setUserCredentials({
-        matricule: request.Ident,
+        userID: request.Ident,
         password: request.Password,
       });
     }

@@ -21,8 +21,8 @@ export default function Header(): ReactElement {
 
   return (
     <header id={"header"}>
-      <Link to={"/"}>
-        <figure title={"Accueil"}>
+      <Link to={"http://192.168.0.254:8080/USV_PROD/menu0.asp"} title={"USV"}>
+        <figure>
           <img src={logo} alt={"logo"} />
         </figure>
       </Link>

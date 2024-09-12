@@ -8,6 +8,11 @@
   align-items: center;
 }
 
+#header a {
+  position: relative;
+  z-index: 1;
+}
+
 #header figure {
   width: 150px;
 }

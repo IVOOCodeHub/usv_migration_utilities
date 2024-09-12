@@ -1,4 +1,4 @@
 export interface IUserCredentials {
-  matricule: string;
+  userID: string;
   password: string;
 }

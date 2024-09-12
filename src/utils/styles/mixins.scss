@@ -1,8 +1,7 @@
 @use './variables' as vars;
 
 @mixin landingSections {
-  min-height: 60dvh;
-  max-height: 60dvh;
+  height: 80dvh;
   background: #fffff4;
   display: flex;
   flex-flow: column;

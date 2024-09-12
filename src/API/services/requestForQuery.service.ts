@@ -26,10 +26,12 @@ export class RequestForQueryService {
     };
 
     try {
-      await apiCalls.postRequest(this.postRequestForQueryEndpoint, params);
+      const res = await apiCalls.postRequest(this.postRequestForQueryEndpoint, params);
+      console.log(res);
+      return res
     } catch (error) {
-      console.log(error);
-      throw error;
+      console.error(error);
+      return error;
     }
   }
 }

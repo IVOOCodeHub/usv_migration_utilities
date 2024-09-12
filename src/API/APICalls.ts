@@ -42,9 +42,8 @@ export class APICalls implements IAPICalls {
       // credentials: 'include',
     })
     if (!response.ok) {
-      const error: Error = new Error('Network response was not ok')
-      console.error(error)
-      throw error
+      const res = await response.json()
+      throw new Error(res.message)
     }
     const data: T = await response.json()
     return { data, headers: response.headers } as APIResponse<T>

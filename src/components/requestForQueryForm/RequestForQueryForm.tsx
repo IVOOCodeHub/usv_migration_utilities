@@ -16,6 +16,7 @@ import { LoaderContext } from "../../context/LoaderContext/LoaderContext.tsx";
 
 // components
 import Loader from "../loader/Loader";
+import GoBackBtn from "../gobackBtn/GoBackBtn";
 
 // services
 import { RequestForQueryService } from "../../API/services/requestForQuery.service";
@@ -33,9 +34,12 @@ export default function RequestForQueryForm(): ReactElement {
 
   const [queryOverview, setQueryOverview] = useState("");
   const [expectedQueryResult, setExpectedQueryResult] = useState("");
+  const [submitResponse, setSubmitResponse] = useState("");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setSubmitResponse("");
 
     const datas: IRequestForQuery = {
       pageKey: pageKey!,
@@ -44,8 +48,20 @@ export default function RequestForQueryForm(): ReactElement {
     };
 
     startLoading();
-    await requestForQueryService.postRequestForQuery(userCredentials!, datas);
+    const res = await requestForQueryService.postRequestForQuery(
+      userCredentials!,
+      datas,
+    );
     stopLoading();
+    if (res instanceof Error) {
+      alert(res.message);
+    } else {
+      const confirmationMessage =
+        language === "en"
+          ? "Request for query successfully submitted"
+          : "La demande de requête a été envoyée avec succès";
+      setSubmitResponse(confirmationMessage);
+    }
   };
 
   return (
@@ -53,58 +69,69 @@ export default function RequestForQueryForm(): ReactElement {
       {isLoading ? (
         <Loader />
       ) : (
-        <form id={"requestForQueryForm"} onSubmit={handleSubmit}>
-          <h2>
-            {language === "en" ? "Request for query" : "Demande de requête"}
-          </h2>
-          <div className={"formInputWrapper"}>
-            <label>
-              {language === "en"
-                ? "Name of the page for which to make the request: "
-                : "Nom de la page pour laquelle effectuer la demande : "}
-            </label>
-            <p>
-              Page :<b style={{ fontWeight: "700" }}> {pageName}</b>,{" "}
-              {language === "en" ? " Key of the page: " : " cle de la page :"}{" "}
-              <b style={{ fontWeight: "700" }}>{pageKey}</b>
-            </p>
-          </div>
-          <div className={"formInputWrapper"}>
-            <label>
-              {language === "en"
-                ? "Query overview"
-                : "Vue d'ensemble de la requête"}
-            </label>
-            <textarea
-              placeholder={
-                language === "en"
-                  ? "Describe what your query should does (context, steps, etc.)."
-                  : "Décrivez ce que votre requête doit faire (contexte, étapes, etc.)."
-              }
-              onChange={(e) => setQueryOverview(e.target.value)}
-            ></textarea>
-          </div>
-          <div className={"formInputWrapper"}>
-            <label>
-              {language === "en" ? "Expected query result" : "Résultat attendu"}
-            </label>
-            <textarea
-              placeholder={
-                language === "en"
-                  ? `If possible, provide an example in JSON format.`
-                  : `Si possible, donnez un exemple au format JSON.
+        <>
+          {submitResponse ? (
+            <h2>{submitResponse}</h2>
+          ) : (
+            <form id={"requestForQueryForm"} onSubmit={handleSubmit}>
+              <h2>
+                {language === "en" ? "Request for query" : "Demande de requête"}
+              </h2>
+              <div className={"formInputWrapper"}>
+                <label>
+                  {language === "en"
+                    ? "Name of the page for which to make the request: "
+                    : "Nom de la page pour laquelle effectuer la demande : "}
+                </label>
+                <p>
+                  Page :<b style={{ fontWeight: "700" }}> {pageName}</b>,{" "}
+                  {language === "en"
+                    ? " Key of the page: "
+                    : " cle de la page :"}{" "}
+                  <b style={{ fontWeight: "700" }}>{pageKey}</b>
+                </p>
+              </div>
+              <div className={"formInputWrapper"}>
+                <label>
+                  {language === "en"
+                    ? "Query overview"
+                    : "Vue d'ensemble de la requête"}
+                </label>
+                <textarea
+                  placeholder={
+                    language === "en"
+                      ? "Describe what your query should does (context, steps, etc.)."
+                      : "Décrivez ce que votre requête doit faire (contexte, étapes, etc.)."
+                  }
+                  onChange={(e) => setQueryOverview(e.target.value)}
+                ></textarea>
+              </div>
+              <div className={"formInputWrapper"}>
+                <label>
+                  {language === "en"
+                    ? "Expected query result"
+                    : "Résultat attendu"}
+                </label>
+                <textarea
+                  placeholder={
+                    language === "en"
+                      ? `If possible, provide an example in JSON format.`
+                      : `Si possible, donnez un exemple au format JSON.
                 `
-              }
-              onChange={(e) => setExpectedQueryResult(e.target.value)}
-            ></textarea>
-          </div>
-          <div className={"formButtonWrapper"}>
-            <button className={"submitButton"} type={"submit"}>
-              {language === "en" ? "Submit request" : "Envoyer la demande"}
-            </button>
-          </div>
-        </form>
+                  }
+                  onChange={(e) => setExpectedQueryResult(e.target.value)}
+                ></textarea>
+              </div>
+              <div className={"formButtonWrapper"}>
+                <button className={"submitButton"} type={"submit"}>
+                  {language === "en" ? "Submit request" : "Envoyer la demande"}
+                </button>
+              </div>
+            </form>
+          )}
+        </>
       )}
+      <GoBackBtn />
     </>
   );
 }

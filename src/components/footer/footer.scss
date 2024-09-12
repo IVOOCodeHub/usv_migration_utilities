@@ -2,8 +2,8 @@
 @use '../../utils/styles/mixins' as mixins;
 
 #footer {
-  max-height: 10dvh;
-  min-height: 10dvh;
+  max-height: 15dvh;
+  min-height: 15dvh;
   background: vars.$colorSecondary;
   display: flex;
   flex-flow: column;
@@ -20,6 +20,7 @@
 }
 
 #footer p {
+  padding: .5em;
   color: white;
   font-size: 1em;
 }
