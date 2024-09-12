@@ -16,7 +16,7 @@ import Home from "./layouts/home/Home";
 
 function App(): ReactElement {
   return (
-    <Router basename={'/asp-to-bdd'}>
+    <Router basename={'/usv_migration_utilities'}>
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />

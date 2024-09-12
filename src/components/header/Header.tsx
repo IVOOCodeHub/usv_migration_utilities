@@ -17,7 +17,7 @@ import { LanguageContext } from "../../context/LanguageContext/LanguageContext";
 export default function Header(): ReactElement {
   const { language, setLanguageHandler } = useContext(LanguageContext);
   const title =
-    language === "en" ? "Export .ASP to BDD" : "Exporter .ASP en BDD";
+    language === "en" ? "USV migration utilities" : "Utilitaires de migration USV";
 
   return (
     <header id={"header"}>

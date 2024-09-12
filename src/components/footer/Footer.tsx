@@ -25,7 +25,7 @@ export default function Footer(): ReactElement {
       </Link>
       <p>
         ©2024{" "}
-        {language === "en" ? "Export .ASP to BDD" : "Export .ASP vers BDD"}
+        {language === "en" ? "USV migration utilities" : "Utilitaires de migration USV"}
       </p>
     </footer>
   );

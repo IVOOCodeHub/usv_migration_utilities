@@ -2,13 +2,15 @@
 import "./requestForQueryForm.scss";
 
 // types
-import { ReactElement } from "react";
+import { ReactElement, FormEvent } from "react";
+import { IRequestForQuery } from "../../API/interfaces/requestForQuery.interface.ts";
 
 // hooks
 import { useContext, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 // context
+import { UserContext } from "../../context/userContext/UserContext";
 import { LanguageContext } from "../../context/LanguageContext/LanguageContext.tsx";
 import { LoaderContext } from "../../context/LoaderContext/LoaderContext.tsx";
 
@@ -20,6 +22,7 @@ import { RequestForQueryService } from "../../API/services/requestForQuery.servi
 const requestForQueryService = new RequestForQueryService();
 
 export default function RequestForQueryForm(): ReactElement {
+  const { userCredentials } = useContext(UserContext);
   const { language } = useContext(LanguageContext);
   const { isLoading, startLoading, stopLoading } = useContext(LoaderContext);
 
@@ -31,17 +34,17 @@ export default function RequestForQueryForm(): ReactElement {
   const [queryOverview, setQueryOverview] = useState("");
   const [expectedQueryResult, setExpectedQueryResult] = useState("");
 
-  const handleSubmit = async () => {
-    const datas = {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const datas: IRequestForQuery = {
       pageKey: pageKey!,
-      pageName: pageName!,
       queryOverview: queryOverview,
       expectedQueryResult: expectedQueryResult,
     };
-    console.log("datas =>", datas);
 
     startLoading();
-    await requestForQueryService.postRequestForQuery(datas);
+    await requestForQueryService.postRequestForQuery(userCredentials!, datas);
     stopLoading();
   };
 

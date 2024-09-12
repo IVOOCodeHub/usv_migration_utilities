@@ -15,8 +15,8 @@ export class APICalls implements IAPICalls {
   baseUrl: string
   constructor() {
     this.baseUrl = isOnProduction
-      ? 'http://192.168.0.112:8800/api/storedProcedure'
-      : 'http://192.168.0.112/Public/'
+      ? 'http://192.168.0.112:8800/api'
+      : 'http://192.168.0.112/Public'
   }
 
   async getRequest<T>(endpoint: string): Promise<T> {
