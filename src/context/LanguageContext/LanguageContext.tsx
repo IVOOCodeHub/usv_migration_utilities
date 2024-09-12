@@ -6,12 +6,12 @@ interface ILanguageContext {
 }
 
 export const LanguageContext = createContext<ILanguageContext>({
-  language: "en",
+  language: "fr",
   setLanguageHandler: () => {},
 });
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState("en");
+  const [language, setLanguage] = useState("fr");
 
   const setLanguageHandler = (language: string) => {
     setLanguage(language);

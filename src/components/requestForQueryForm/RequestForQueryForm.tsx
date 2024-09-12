@@ -1,0 +1,107 @@
+// styles
+import "./requestForQueryForm.scss";
+
+// types
+import { ReactElement } from "react";
+
+// hooks
+import { useContext, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+
+// context
+import { LanguageContext } from "../../context/LanguageContext/LanguageContext.tsx";
+import { LoaderContext } from "../../context/LoaderContext/LoaderContext.tsx";
+
+// components
+import Loader from "../loader/Loader";
+
+// services
+import { RequestForQueryService } from "../../API/services/requestForQuery.service";
+const requestForQueryService = new RequestForQueryService();
+
+export default function RequestForQueryForm(): ReactElement {
+  const { language } = useContext(LanguageContext);
+  const { isLoading, startLoading, stopLoading } = useContext(LoaderContext);
+
+  const [searchParams] = useSearchParams();
+  const pageKey = searchParams.get("pageKey");
+  const getPageName = searchParams.get("pageName");
+  const pageName = getPageName?.slice(0, -1);
+
+  const [queryOverview, setQueryOverview] = useState("");
+  const [expectedQueryResult, setExpectedQueryResult] = useState("");
+
+  const handleSubmit = async () => {
+    const datas = {
+      pageKey: pageKey!,
+      pageName: pageName!,
+      queryOverview: queryOverview,
+      expectedQueryResult: expectedQueryResult,
+    };
+    console.log("datas =>", datas);
+
+    startLoading();
+    await requestForQueryService.postRequestForQuery(datas);
+    stopLoading();
+  };
+
+  return (
+    <>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <form id={"requestForQueryForm"} onSubmit={handleSubmit}>
+          <h2>
+            {language === "en" ? "Request for query" : "Demande de requête"}
+          </h2>
+          <div className={"formInputWrapper"}>
+            <label>
+              {language === "en"
+                ? "Name of the page for which to make the request: "
+                : "Nom de la page pour laquelle effectuer la demande : "}
+            </label>
+            <p>
+              Page :<b style={{ fontWeight: "700" }}> {pageName}</b>,{" "}
+              {language === "en" ? " Key of the page: " : " cle de la page :"}{" "}
+              <b style={{ fontWeight: "700" }}>{pageKey}</b>
+            </p>
+          </div>
+          <div className={"formInputWrapper"}>
+            <label>
+              {language === "en"
+                ? "Query overview"
+                : "Vue d'ensemble de la requête"}
+            </label>
+            <textarea
+              placeholder={
+                language === "en"
+                  ? "Describe what your query should does (context, steps, etc.)."
+                  : "Décrivez ce que votre requête doit faire (contexte, étapes, etc.)."
+              }
+              onChange={(e) => setQueryOverview(e.target.value)}
+            ></textarea>
+          </div>
+          <div className={"formInputWrapper"}>
+            <label>
+              {language === "en" ? "Expected query result" : "Résultat attendu"}
+            </label>
+            <textarea
+              placeholder={
+                language === "en"
+                  ? `If possible, provide an example in JSON format.`
+                  : `Si possible, donnez un exemple au format JSON.
+                `
+              }
+              onChange={(e) => setExpectedQueryResult(e.target.value)}
+            ></textarea>
+          </div>
+          <div className={"formButtonWrapper"}>
+            <button className={"submitButton"} type={"submit"}>
+              {language === "en" ? "Submit request" : "Envoyer la demande"}
+            </button>
+          </div>
+        </form>
+      )}
+    </>
+  );
+}

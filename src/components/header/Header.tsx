@@ -28,11 +28,11 @@ export default function Header(): ReactElement {
       </Link>
       <h1>{title}</h1>
       <div className={"buttonWrapper"}>
-        <span title={"Anglais"} onClick={() => setLanguageHandler("en")}>
-          🇬🇧
-        </span>
         <span title={"Français"} onClick={() => setLanguageHandler("fr")}>
           🇫🇷
+        </span>
+        <span title={"Anglais"} onClick={() => setLanguageHandler("en")}>
+          🇬🇧
         </span>
       </div>
     </header>
