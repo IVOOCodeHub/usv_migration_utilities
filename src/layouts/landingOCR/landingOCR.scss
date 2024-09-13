@@ -1,0 +1,14 @@
+@use "../../utils/styles/variables" as vars;
+@use "../../utils/styles/mixins" as mixins;
+
+#landingOCR {
+  min-height: 80dvh;
+  transition: all 0.3s ease-in-out;
+  background: #cccccc;
+}
+
+#landingOCR h2 {
+  font-size: 2rem;
+  text-align: center;
+  font-weight: 700;
+}

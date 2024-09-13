@@ -13,13 +13,15 @@ import Footer from "./components/footer/Footer.tsx";
 
 // layout
 import Home from "./layouts/home/Home";
+import LandingOCR from "./layouts/landingOCR/LandingOCR.tsx";
 
 function App(): ReactElement {
   return (
-    <Router basename={'/usv_migration_utilities'}>
+    <Router basename={"/usv_migration_utilities"}>
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/LandingOCR" element={<LandingOCR />} />
       </Routes>
       <Footer />
     </Router>
