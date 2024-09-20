@@ -1,0 +1,22 @@
+@use "../../utils/styles/variables" as vars;
+@use "../../utils/styles/mixins" as mixins;
+
+#extractTextFromImage {
+  width: 49%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+
+#extractTextFromImage textarea {
+  padding: 0.5em;
+  width: 100%;
+  resize: none;
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  line-height: 1.5;
+  overflow: hidden;
+}

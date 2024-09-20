@@ -1,0 +1,65 @@
+@use "../../utils/styles/variables" as vars;
+@use "../../utils/styles/mixins" as mixins;
+
+#displayAnnotateComponents {
+  width: 49%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  margin-right: 1%;
+}
+
+#displayAnnotateComponents article:not(:first-child) {
+  width: 100%;
+  background: vars.$colorPrimary;
+  padding: 0.5em;
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+#displayAnnotateComponents article h3 {
+  margin-bottom: 1em;
+}
+
+#displayAnnotateComponents ul {
+  display: flex;
+  flex-flow: column;
+  gap: 0.5em;
+  padding-left: 0.75em;
+}
+
+#displayAnnotateComponents ul li {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#displayAnnotateComponents ul li label {
+  font-weight: 700;
+  font-style: oblique;
+  width: 40%;
+}
+
+#displayAnnotateComponents ul li input {
+  padding: 0.5em;
+  width: 58%;
+  background: #f2f2f2;
+  border: 1px solid #ccc;
+}
+
+#displayAnnotateComponents .btnWrapper {
+  display: flex;
+  gap: 2em;
+}
+
+#displayAnnotateComponents .btnWrapper button:first-child {
+  @include mixins.redButton;
+}
+
+#displayAnnotateComponents .btnWrapper button:last-child {
+  @include mixins.greenButton;
+}

@@ -2,52 +2,47 @@
 import "./extractImageForm.scss";
 
 // types
-import { ReactElement, MouseEvent, FormEvent } from "react";
+import { ReactElement, FormEvent, Dispatch, SetStateAction } from "react";
 
-// hooks
+// hooks | libraries
 import { useContext, useState, useEffect } from "react";
 
 // context
 import { LanguageContext } from "../../context/LanguageContext/LanguageContext";
 
-export default function ExtractImageForm(): ReactElement {
+export default function ExtractImageForm({
+  image,
+  setImage,
+  setDatas,
+}: {
+  image: string | null;
+  setImage: Dispatch<SetStateAction<string | null>>;
+  setDatas: Dispatch<SetStateAction<object | null>>;
+}): ReactElement {
   const { language } = useContext(LanguageContext);
   const [file, setFile] = useState<File | null>(null);
-  const [image, setImage] = useState<string | null>(null);
+  const [pageName, setPageName] = useState<string>("");
   const [template, setTemplate] = useState<string>("");
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isBtnEnabled, setIsBtnEnabled] = useState<boolean>(false);
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleClickOutside = (e: MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      handleCloseModal();
-    }
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSetFile = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const datas = {
-      image: image,
-      template: template,
-    };
-
-    console.log("datas", datas);
-  };
-
-  useEffect(() => {
     if (file) {
       const imageURL = URL.createObjectURL(file);
       setImage(imageURL);
     }
-  }, [file]);
+
+    const datas = {
+      template: template,
+      pageName: pageName,
+    };
+
+    setDatas(datas);
+  };
 
   useEffect(() => {
-    if (image && template !== "") {
+    if (file && template !== "") {
       setIsBtnEnabled(true);
     } else {
       setIsBtnEnabled(false);
@@ -55,8 +50,8 @@ export default function ExtractImageForm(): ReactElement {
   }, [image, template]);
 
   return (
-    <>
-      <form id={"extractImageForm"} onSubmit={handleSubmit}>
+    <div className={"extractImageForm"}>
+      <form id={"extractImageForm"} onSubmit={handleSetFile}>
         <h3>{language === "en" ? "Picture selection" : "Sélection d'image"}</h3>
         <div className={"formInputWrapper"}>
           <label htmlFor={"selectImg"}>
@@ -69,6 +64,18 @@ export default function ExtractImageForm(): ReactElement {
             id={"selectImg"}
             accept={"image/*"}
             onChange={(e) => setFile(e.target.files![0])}
+          />
+        </div>
+        <div className={"formInputWrapper"}>
+          <label htmlFor={"pageName"}>
+            {language === "en"
+              ? "Please fill the page name"
+              : "Veuillez renseigner le nom de la page"}
+          </label>
+          <input
+            type={"text"}
+            id={"pageName"}
+            onChange={(e) => setPageName(e.target.value)}
           />
         </div>
         <div className={"formInputWrapper"}>
@@ -95,17 +102,6 @@ export default function ExtractImageForm(): ReactElement {
             </option>
           </select>
         </div>
-        {image && (
-          <figure>
-            <img
-              className={"previewImage"}
-              src={image}
-              alt={"image selected"}
-              title={language === "en" ? "Display image" : "Afficher l'image"}
-              onClick={() => setIsModalOpen(true)}
-            />
-          </figure>
-        )}
         <div className={"btnWrapper"}>
           <button
             className={isBtnEnabled ? "btn" : "btnDisabled"}
@@ -116,21 +112,6 @@ export default function ExtractImageForm(): ReactElement {
           </button>
         </div>
       </form>
-
-      {image && isModalOpen && (
-        <div className={"screenshotModal"} onClick={handleClickOutside}>
-          <div className="modalWrapper" onClick={(e) => e.stopPropagation()}>
-            <span
-              className="closeModal"
-              onClick={handleCloseModal}
-              title={"Close modal"}
-            >
-              &times;
-            </span>
-            <img src={image} alt={"image enlarged"} style={{ width: "100%" }} />
-          </div>
-        </div>
-      )}
-    </>
+    </div>
   );
 }

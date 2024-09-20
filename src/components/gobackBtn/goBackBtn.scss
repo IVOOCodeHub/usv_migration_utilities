@@ -2,5 +2,5 @@
 @use "../../utils/styles/variables" as vars;
 
 #backButtonWrapper .goBackButton {
-  @include mixins.crimsonButton;
+  @include mixins.redButton;
 }

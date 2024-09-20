@@ -1,0 +1,73 @@
+@use "../../utils/styles/variables" as vars;
+@use "../../utils/styles/mixins" as mixins;
+@import url("https://rsms.me/inter/inter.css");
+
+#imageAnnotate {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 80dvh;
+  //height: 800px;
+  overflow: hidden;
+}
+
+#imageAnnotate .imageAnnotateWrapper {
+  width: 100%;
+  height: 88%;
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.div-root-3.div-root-4 {
+  height: 50px !important;
+}
+
+#imageAnnotate p {
+  font-size: 1.2em;
+  font-style: oblique;
+}
+
+#imageAnnotate .imageAnnotateFooter {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#imageAnnotate .imageAnnotateFooter div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2em;
+  margin: 1dvh 0;
+}
+
+#imageAnnotate .imageAnnotateFooter .cancelBtn {
+  @include mixins.redButton;
+}
+
+#imageAnnotate .imageAnnotateFooter .submitBtn {
+  @include mixins.greenButton;
+}
+
+#imageAnnotate .imageAnnotateFooter .submitBtn--disabled {
+  cursor: not-allowed !important;
+  padding: 6px 14px !important;
+  font-size: 1em !important;
+  @include mixins.greyButton;
+}
+
+.div-root-56.div-root-57,
+.div-root-64.div-root-65 {
+  display: none !important;
+}
+
+.div-root-74.div-root-75,
+.div-root-76.div-root-77 {
+  color: green !important;
+  font-weight: 700 !important;
+  font-size: 1em !important;
+}
