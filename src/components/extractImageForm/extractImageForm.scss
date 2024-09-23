@@ -3,6 +3,10 @@
 
 .extractImageForm {
   display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  height: 80dvh;
 }
 
 #extractImageForm {
@@ -34,6 +38,10 @@
   font-style: oblique;
 }
 
+#extractImageForm input[type="text"] {
+  padding: .5em;
+}
+
 #extractImageForm select {
   width: fit-content;
 }
@@ -53,4 +61,3 @@
 #extractImageForm .btn {
   @include mixins.button;
 }
-

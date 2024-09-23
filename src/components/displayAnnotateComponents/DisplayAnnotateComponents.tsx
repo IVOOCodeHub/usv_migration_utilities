@@ -8,7 +8,7 @@ interface IDisplayAnnotateComponentsProps {
   pageElements: IPageElement[];
   datas: object | null;
   setDatas: Dispatch<SetStateAction<object | null>>;
-  saveInformations: () => void;
+  setImage: Dispatch<SetStateAction<string | null>>;
 }
 interface IInputValues {
   [key: string]: string;
@@ -19,14 +19,20 @@ import { useContext, useState } from "react";
 
 // context
 import { LanguageContext } from "../../context/LanguageContext/LanguageContext";
+import { LoaderContext } from "../../context/LoaderContext/LoaderContext.tsx";
+
+// component
+import Loader from "../../components/loader/Loader";
 
 export default function DisplayAnnotateComponents({
   pageElements,
   datas,
   setDatas,
-  saveInformations,
+  setImage,
 }: IDisplayAnnotateComponentsProps): ReactElement {
   const { language } = useContext(LanguageContext);
+  const { isLoading, startLoading, stopLoading } = useContext(LoaderContext);
+
   const [inputValues, setInputValues] = useState<IInputValues>({});
 
   const noIdentifiedComponentsMessage =
@@ -70,6 +76,8 @@ export default function DisplayAnnotateComponents({
   };
 
   const handleSubmit = () => {
+    startLoading();
+
     const updatedDatas = {
       ...datas,
       componentsByCat: {
@@ -93,95 +101,125 @@ export default function DisplayAnnotateComponents({
         ),
       },
     };
-    setDatas(updatedDatas);
-    saveInformations();
+
+    const newData = updatedDatas;
+
+    console.log("updated Datas ->", newData);
+
+    // final submit -> request API should be triggered here
+
+    setDatas(null); // clean datas state, then
+    setImage(null); // clean image state, for reset app after submit.
+    stopLoading();
   };
 
   return (
     <>
-      <h2>
-        {language === "en" ? "Identified components" : "Composants identifiés"}
-      </h2>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <h2>
+            {language === "en"
+              ? "Identified components"
+              : "Composants identifiés"}
+          </h2>
 
-      <article>
-        <h3>
-          {language === "en" ? "Header components" : "Composant d'en-tête"}
-        </h3>
-        <ul>
-          {componentsByCategory.headerComponents.length > 0 ? (
-            <>
-              {componentsByCategory.headerComponents.map((component, index) => (
-                <li key={index}>
-                  <label>{component} : </label>
-                  <input
-                    type={"text"}
-                    value={inputValues[component] || ""}
-                    onChange={(event) => handleInputChange(component, event)}
-                  />
-                </li>
-              ))}
-            </>
-          ) : (
-            <p>{noIdentifiedComponentsMessage}</p>
-          )}
-        </ul>
-      </article>
+          <article>
+            <h3>
+              {language === "en" ? "Header components" : "Composant d'en-tête"}
+            </h3>
+            <ul>
+              {componentsByCategory.headerComponents.length > 0 ? (
+                <>
+                  {componentsByCategory.headerComponents.map(
+                    (component, index) => (
+                      <li key={index}>
+                        <label>{component} : </label>
+                        <input
+                          type={"text"}
+                          value={inputValues[component] || ""}
+                          onChange={(event) =>
+                            handleInputChange(component, event)
+                          }
+                        />
+                      </li>
+                    ),
+                  )}
+                </>
+              ) : (
+                <p>{noIdentifiedComponentsMessage}</p>
+              )}
+            </ul>
+          </article>
 
-      <article>
-        <h3>{language === "en" ? "Body components" : "Composant de corps"}</h3>
-        <ul>
-          {componentsByCategory.bodyComponents.length > 0 ? (
-            <>
-              {componentsByCategory.bodyComponents.map((component, index) => (
-                <li key={index}>
-                  <label>{component} : </label>
-                  <input
-                    type={"text"}
-                    value={inputValues[component] || ""}
-                    onChange={(event) => handleInputChange(component, event)}
-                  />
-                </li>
-              ))}
-            </>
-          ) : (
-            <p>{noIdentifiedComponentsMessage}</p>
-          )}
-        </ul>
-      </article>
+          <article>
+            <h3>
+              {language === "en" ? "Body components" : "Composant de corps"}
+            </h3>
+            <ul>
+              {componentsByCategory.bodyComponents.length > 0 ? (
+                <>
+                  {componentsByCategory.bodyComponents.map(
+                    (component, index) => (
+                      <li key={index}>
+                        <label>{component} : </label>
+                        <input
+                          type={"text"}
+                          value={inputValues[component] || ""}
+                          onChange={(event) =>
+                            handleInputChange(component, event)
+                          }
+                        />
+                      </li>
+                    ),
+                  )}
+                </>
+              ) : (
+                <p>{noIdentifiedComponentsMessage}</p>
+              )}
+            </ul>
+          </article>
 
-      <article>
-        <h3>
-          {language === "en"
-            ? "Footer components"
-            : "Composant de pied-de-page"}
-        </h3>
-        <ul>
-          {componentsByCategory.footerComponents.length > 0 ? (
-            <>
-              {componentsByCategory.footerComponents.map((component, index) => (
-                <li key={index}>
-                  <label>{component} : </label>
-                  <input
-                    type={"text"}
-                    value={inputValues[component] || ""}
-                    onChange={(event) => handleInputChange(component, event)}
-                  />
-                </li>
-              ))}
-            </>
-          ) : (
-            <p>{noIdentifiedComponentsMessage}</p>
-          )}
-        </ul>
-      </article>
-      <div className={"btnWrapper"}>
-        <button type={"button"}>
-          {language === "en" ? "Cancel" : "Annuler"}
-        </button>
-        <button onClick={handleSubmit}>
-          {language === "en" ? "Submit" : "Soumettre"}
-        </button>
-      </div>
+          <article>
+            <h3>
+              {language === "en"
+                ? "Footer components"
+                : "Composant de pied-de-page"}
+            </h3>
+            <ul>
+              {componentsByCategory.footerComponents.length > 0 ? (
+                <>
+                  {componentsByCategory.footerComponents.map(
+                    (component, index) => (
+                      <li key={index}>
+                        <label>{component} : </label>
+                        <input
+                          type={"text"}
+                          value={inputValues[component] || ""}
+                          onChange={(event) =>
+                            handleInputChange(component, event)
+                          }
+                        />
+                      </li>
+                    ),
+                  )}
+                </>
+              ) : (
+                <p>{noIdentifiedComponentsMessage}</p>
+              )}
+            </ul>
+          </article>
+          <div className={"btnWrapper"}>
+            <button type={"button"}>
+              {language === "en" ? "Cancel" : "Annuler"}
+            </button>
+            <button onClick={handleSubmit}>
+              {language === "en" ? "Submit" : "Soumettre"}
+            </button>
+          </div>
+        </>
+      )}
     </>
   );
 }
