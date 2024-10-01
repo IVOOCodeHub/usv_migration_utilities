@@ -2,7 +2,7 @@
 import "./imageAnnotate.scss";
 
 // types
-import { ReactElement, Dispatch, SetStateAction, useState } from "react";
+import { ReactElement, Dispatch, SetStateAction } from "react";
 import { IPageElement } from "../../layouts/landingOCR/LandingOCR.tsx";
 interface IAnnotationRegion {
   id: string;
@@ -27,10 +27,13 @@ interface IAnnotationOutput {
 
 // context
 import { LanguageContext } from "../../context/LanguageContext/LanguageContext";
+import { DictionaryContext } from "../../context/dictionaryContext/DictionaryContext";
 
 // hooks | libraries
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import ReactImageAnnotate from "react-image-annotate";
+import { IComponentDictionary } from "../../API/interfaces/componentsDictionary.interface.ts";
+
 
 export default function ImageAnnotate({
   image,
@@ -43,9 +46,12 @@ export default function ImageAnnotate({
   setPageElements: Dispatch<SetStateAction<IPageElement[]>>;
 }): ReactElement {
   const { language } = useContext(LanguageContext);
+  const { componentsDictionary, getComponentsDictionary } =
+    useContext(DictionaryContext);
   const [annotations, setAnnotations] = useState<IAnnotationRegion[] | null>(
     null,
   );
+  const [regionTagList, setRegionTagList] = useState<string[]>([]);
 
   // create an array to avoid error
   // " Warning: Each child in a list should have a unique "key" prop."
@@ -91,40 +97,51 @@ export default function ImageAnnotate({
     setPageElements(newElements);
   };
 
+  useEffect(() => {
+    if (componentsDictionary && componentsDictionary.length === 0) {
+      getComponentsDictionary();
+    }
+  }, []);
+
+  useEffect(() => {
+    handleRegionTagList();
+  }, [componentsDictionary]);
+
+  const handleRegionTagList: () => Promise<void> = async (): Promise<void> => {
+    componentsDictionary!.forEach((component: IComponentDictionary): void => {
+      setRegionTagList((prevState: string[]): string[] => [
+        ...prevState,
+        component.denomination_commune,
+      ]);
+    });
+  };
+
   return (
     <>
       <div className={"imageAnnotateWrapper"}>
-        <ReactImageAnnotate
-          images={imagesArray}
-          regionTagList={[
-            language === "en" ? "Title" : "Titre",
-            language === "en" ? "Subtitle" : "Sous-titre",
-            language === "en" ? "Caption" : "Légende",
-            language === "en" ? "Table" : "Tableau",
-            language === "en" ? "Confirm button" : "Bouton de confirmation",
-            language === "en" ? "Close button" : "Bouton de fermeture",
-            language === "en" ? "Link button" : "Bouton de re-direction",
-            language === "en" ? "Image" : "Image",
-            language === "en" ? "Link" : "Lien",
-          ]}
-          regionClsList={[
-            language === "en" ? "Header" : "En-tête",
-            language === "en" ? "Body" : "Contenu",
-            language === "en" ? "Footer" : "Pied de page",
-          ]}
-          onExit={handleAnnotationsChange}
-          enabledTools={["create-box"]}
-          hideNext={true}
-          hidePrev={true}
-          hideSettings={true}
-          hideClone={true}
-          hideDelete={true}
-          hideFullScreen={true}
-          hideToolbar={true}
-          hideHeader={false}
-          hideHeaderText={false}
-          hideSave={false}
-        />
+        {regionTagList.length > 0 && (
+          <ReactImageAnnotate
+            images={imagesArray}
+            regionTagList={regionTagList}
+            regionClsList={[
+              language === "en" ? "Header" : "En-tête",
+              language === "en" ? "Body" : "Contenu",
+              language === "en" ? "Footer" : "Pied de page",
+            ]}
+            onExit={handleAnnotationsChange}
+            enabledTools={["create-box"]}
+            hideNext={true}
+            hidePrev={true}
+            hideSettings={true}
+            hideClone={true}
+            hideDelete={true}
+            hideFullScreen={true}
+            hideToolbar={true}
+            hideHeader={false}
+            hideHeaderText={false}
+            hideSave={false}
+          />
+        )}
       </div>
       <div className={"imageAnnotateFooter"}>
         <p>

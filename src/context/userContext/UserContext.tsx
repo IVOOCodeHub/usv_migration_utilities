@@ -1,9 +1,12 @@
+// types
+import { IUserCredentials } from "../../API/interfaces/user.interface.ts";
+
+// hooks | libraries
 import { ReactElement, Dispatch, SetStateAction, Context } from "react";
 import { createContext, useState, useEffect } from "react";
-import { IUserCredentials } from "../../API/interfaces/user.interface.ts";
-import { UserService } from "../../API/services/user.service";
 
 // services
+import { UserService } from "../../API/services/user.service";
 const userService = new UserService();
 
 // Define IUserContext interface

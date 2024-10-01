@@ -20,9 +20,15 @@ import { useContext, useState } from "react";
 // context
 import { LanguageContext } from "../../context/LanguageContext/LanguageContext";
 import { LoaderContext } from "../../context/LoaderContext/LoaderContext.tsx";
+import { DictionaryContext } from "../../context/dictionaryContext/DictionaryContext.tsx";
 
 // component
 import Loader from "../../components/loader/Loader";
+
+// services
+import { PageAnnotateToBddService } from "../../API/services/pageAnnotageToBdd.service";
+import { IPageAnnotateToBdd } from "../../API/interfaces/pageAnnotateToBdd.interface.ts";
+const pageAnnotateToBddService = new PageAnnotateToBddService();
 
 export default function DisplayAnnotateComponents({
   pageElements,
@@ -32,6 +38,7 @@ export default function DisplayAnnotateComponents({
 }: IDisplayAnnotateComponentsProps): ReactElement {
   const { language } = useContext(LanguageContext);
   const { isLoading, startLoading, stopLoading } = useContext(LoaderContext);
+  const { componentsDictionary } = useContext(DictionaryContext);
 
   const [inputValues, setInputValues] = useState<IInputValues>({});
 
@@ -75,41 +82,49 @@ export default function DisplayAnnotateComponents({
     });
   };
 
-  const handleSubmit = () => {
+  const componentNameToKey = componentsDictionary!.reduce(
+    (map: { [key: string]: string }, component) => {
+      map[component.denomination_commune] = component.cle;
+      return map;
+    },
+    {},
+  );
+
+  const handleSubmit = async () => {
     startLoading();
 
+    const template: string = (datas as IPageAnnotateToBdd).template
+    const pageName: string = (datas as IPageAnnotateToBdd).pageName
+
     const updatedDatas = {
-      ...datas,
+      template: template,
+      pageName: pageName,
       componentsByCat: {
         headerComponents: componentsByCategory.headerComponents.map(
           (component) => ({
-            component,
+            component: componentNameToKey[component] || component,
             text: inputValues[component] || "",
           }),
         ),
         bodyComponents: componentsByCategory.bodyComponents.map(
           (component) => ({
-            component,
+            component: componentNameToKey[component] || component,
             text: inputValues[component] || "",
           }),
         ),
         footerComponents: componentsByCategory.footerComponents.map(
           (component) => ({
-            component,
+            component: componentNameToKey[component] || component,
             text: inputValues[component] || "",
           }),
         ),
       },
     };
 
-    const newData = updatedDatas;
+    await pageAnnotateToBddService.postPageAnnotateToBdd(updatedDatas);
 
-    console.log("updated Datas ->", newData);
-
-    // final submit -> request API should be triggered here
-
-    setDatas(null); // clean datas state, then
-    setImage(null); // clean image state, for reset app after submit.
+    setImage(null)
+    setDatas(null); // clean states, to reset app after submit.
     stopLoading();
   };
 

@@ -5,12 +5,15 @@ import App from "./App.tsx";
 import { UserProvider } from "./context/userContext/UserContext";
 import { LanguageProvider } from "./context/LanguageContext/LanguageContext";
 import { LoaderProvider } from "./context/LoaderContext/LoaderContext.tsx";
+import { DictionaryProvider } from "./context/dictionaryContext/DictionaryContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <UserProvider>
     <LoaderProvider>
       <LanguageProvider>
-        <App />
+        <DictionaryProvider>
+          <App />
+        </DictionaryProvider>
       </LanguageProvider>
     </LoaderProvider>
   </UserProvider>,

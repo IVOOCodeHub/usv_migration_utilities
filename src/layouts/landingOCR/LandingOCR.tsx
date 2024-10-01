@@ -40,19 +40,6 @@ export default function LandingOCR(): ReactElement {
     }
   };
 
-  // TODO remove this function, to pass this in the NTH:child (3 => DisplayAnnotateComponents)
-  // TODO it's necessary to clean this with an useEffect hook to refresh the datas state.
-  // TODO When the datas state is updated, the API calls should be triggered.
-  // TODO then, the state of datas & img have to be reset to null.
-
-  // TODO => Rework the function handleSubmit in DisplayAnnotateComponents.
-
-  // const saveInformations = () => {
-  //   console.log("saveInformations ->", datas);
-  //   setImage(null)
-  //   setPageElements([]);
-  // };
-
   return (
     <main id={"landingOCR"}>
       {!image && (
