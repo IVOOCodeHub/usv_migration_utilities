@@ -1,6 +1,5 @@
 export interface IPageAnnotateToBdd {
-  template: string;
-  pageName: string;
+  cle_arbo_usv: number;
   componentsByCat: {
     headerComponents: {
       component: string;

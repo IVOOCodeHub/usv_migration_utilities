@@ -2,6 +2,7 @@
 import { IPageAnnotateToBdd } from "../interfaces/pageAnnotateToBdd.interface.ts";
 
 import { APICalls } from "../APICalls.ts";
+import { IUserCredentials } from "../interfaces/user.interface.ts";
 const apiCalls = new APICalls();
 
 export class PageAnnotateToBddService {
@@ -11,16 +12,19 @@ export class PageAnnotateToBddService {
     this.postRequestEndpoint = "/storedProcedure";
   }
 
-  async postPageAnnotateToBdd(data: IPageAnnotateToBdd):Promise<void> {
+  async postPageAnnotateToBdd(
+    userCredentials: IUserCredentials,
+    data: IPageAnnotateToBdd,
+  ): Promise<void> {
     const params = {
-      request: "",
-      args: {
-        data: data,
-      },
+      ...userCredentials,
+      request: "create_edit_arbo_usv_page_components",
+      args: data,
     };
 
     try {
       await apiCalls.postRequest(this.postRequestEndpoint, params);
+      return window.history.back();
     } catch (error) {
       console.log(error);
       throw error;

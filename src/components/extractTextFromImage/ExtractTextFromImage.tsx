@@ -25,7 +25,6 @@ export default function ExtractTextFromImage({
   const { language } = useContext(LanguageContext);
   const [processedText, setProcessedText] = useState("");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  // const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const adjustTextAreaHeight = (element: HTMLTextAreaElement) => {
     element.style.height = "auto";

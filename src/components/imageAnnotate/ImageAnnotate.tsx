@@ -34,10 +34,8 @@ import { useContext, useState, useEffect } from "react";
 import ReactImageAnnotate from "react-image-annotate";
 import { IComponentDictionary } from "../../API/interfaces/componentsDictionary.interface.ts";
 
-
 export default function ImageAnnotate({
   image,
-  setImage,
   setPageElements,
 }: {
   image: string | null;
@@ -73,8 +71,8 @@ export default function ImageAnnotate({
     console.log("annotations : =>", output.images[0].regions);
   };
 
-  const handleCancel = () => {
-    setImage(null);
+  const handleCancel: () => void = (): void => {
+    window.history.back();
   };
 
   const isTagSaved = () => {

@@ -13,22 +13,54 @@ export interface IPageElement {
 
 // context
 import { LanguageContext } from "../../context/LanguageContext/LanguageContext";
+import { UserContext } from "../../context/userContext/UserContext";
 
 // components
-import ExtractImageForm from "../../components/extractImageForm/ExtractImageForm";
 import DisplayAnnotateComponents from "../../components/displayAnnotateComponents/DisplayAnnotateComponents.tsx";
 import ExtractTextFromImage from "../../components/extractTextFromImage/ExtractTextFromImage";
 
 // hooks | libraries
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import ImageAnnotate from "../../components/imageAnnotate/ImageAnnotate.tsx";
 
 export default function LandingOCR(): ReactElement {
+  const searchParams = new URLSearchParams(window.location.search);
+  const pageKey: string | null = searchParams.get("pageKey");
+  const fileName: string | null = searchParams.get("fileName");
+  const getMatricule: string | null = searchParams.get("matricule");
+  const matriculeWithSlash: string | undefined = getMatricule?.split("|")[1];
+  const matricule: string | undefined = matriculeWithSlash?.split("/")[0];
+
   const { language } = useContext(LanguageContext);
+  const { setMatricule } = useContext(UserContext);
+
   const [image, setImage] = useState<string | null>(null);
   const [pageElements, setPageElements] = useState<IPageElement[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [datas, setDatas] = useState<object | null>({});
+
+  const screenshotLocation: string = `http://192.168.0.254:8080/usv_prod/screenshots_page_asp/${fileName}`;
+
+  useEffect((): void => {
+    if (pageKey && fileName) {
+      setImage(screenshotLocation);
+    }
+  }, [fileName]);
+
+  useEffect((): void => {
+    if (pageKey) {
+      setDatas({
+        cle_arbo_usv: pageKey,
+        fileName: fileName,
+      });
+    }
+  }, [pageKey, fileName]);
+
+  useEffect((): void => {
+    if (matricule) {
+      setMatricule(matricule);
+    }
+  }, []);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -42,15 +74,6 @@ export default function LandingOCR(): ReactElement {
 
   return (
     <main id={"landingOCR"}>
-      {!image && (
-        <section>
-          <ExtractImageForm
-            image={image}
-            setImage={setImage}
-            setDatas={setDatas}
-          />
-        </section>
-      )}
       {image && pageElements.length === 0 && (
         <section id={"imageAnnotate"}>
           <ImageAnnotate

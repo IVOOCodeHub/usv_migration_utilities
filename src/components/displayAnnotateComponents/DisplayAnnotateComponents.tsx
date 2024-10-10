@@ -21,6 +21,7 @@ import { useContext, useState } from "react";
 import { LanguageContext } from "../../context/LanguageContext/LanguageContext";
 import { LoaderContext } from "../../context/LoaderContext/LoaderContext.tsx";
 import { DictionaryContext } from "../../context/dictionaryContext/DictionaryContext.tsx";
+import { UserContext } from "../../context/userContext/UserContext";
 
 // component
 import Loader from "../../components/loader/Loader";
@@ -39,14 +40,16 @@ export default function DisplayAnnotateComponents({
   const { language } = useContext(LanguageContext);
   const { isLoading, startLoading, stopLoading } = useContext(LoaderContext);
   const { componentsDictionary } = useContext(DictionaryContext);
+  const { userCredentials } = useContext(UserContext);
 
   const [inputValues, setInputValues] = useState<IInputValues>({});
 
   const noIdentifiedComponentsMessage =
     language === "en"
       ? "No components have been identified for this section."
-      : "Aucun composant n'as été identifié pour cette section.";
+      : "Aucun composant n'a été identifié pour cette section.";
 
+  // Regroup components by category
   const componentsByCategory = pageElements.reduce(
     (acc, pageElement) => {
       const components = pageElement.component || [];
@@ -72,16 +75,18 @@ export default function DisplayAnnotateComponents({
     },
   );
 
+  // Handle input change with unique keys for each component + index
   const handleInputChange = (
-    component: string,
+    componentKey: string,
     event: ChangeEvent<HTMLInputElement>,
-  ) => {
+  ): void => {
     setInputValues({
       ...inputValues,
-      [component]: event.target.value,
+      [componentKey]: event.target.value,
     });
   };
 
+  // Map components to their unique keys from dictionary
   const componentNameToKey = componentsDictionary!.reduce(
     (map: { [key: string]: string }, component) => {
       map[component.denomination_commune] = component.cle;
@@ -90,40 +95,53 @@ export default function DisplayAnnotateComponents({
     {},
   );
 
+  // Handle form submission
   const handleSubmit = async () => {
     startLoading();
 
-    const template: string = (datas as IPageAnnotateToBdd).template
-    const pageName: string = (datas as IPageAnnotateToBdd).pageName
+    const pageKey: number = (datas as IPageAnnotateToBdd).cle_arbo_usv
 
     const updatedDatas = {
-      template: template,
-      pageName: pageName,
+      cle_arbo_usv: Number(pageKey),
       componentsByCat: {
         headerComponents: componentsByCategory.headerComponents.map(
-          (component) => ({
+          (
+            component: string,
+            index: number,
+          ): { component: string; text: string } => ({
             component: componentNameToKey[component] || component,
-            text: inputValues[component] || "",
+            text: inputValues[`${component}-${index}`] || "",
           }),
         ),
         bodyComponents: componentsByCategory.bodyComponents.map(
-          (component) => ({
+          (
+            component: string,
+            index: number,
+          ): { component: string; text: string } => ({
             component: componentNameToKey[component] || component,
-            text: inputValues[component] || "",
+            text: inputValues[`${component}-${index}`] || "",
           }),
         ),
         footerComponents: componentsByCategory.footerComponents.map(
-          (component) => ({
+          (
+            component: string,
+            index: number,
+          ): { component: string; text: string } => ({
             component: componentNameToKey[component] || component,
-            text: inputValues[component] || "",
+            text: inputValues[`${component}-${index}`] || "",
           }),
         ),
       },
     };
 
-    await pageAnnotateToBddService.postPageAnnotateToBdd(updatedDatas);
+    console.log("Submitted datas =>", updatedDatas);
 
-    setImage(null)
+    await pageAnnotateToBddService.postPageAnnotateToBdd(
+      userCredentials!,
+      updatedDatas,
+    );
+
+    setImage(null);
     setDatas(null); // clean states, to reset app after submit.
     stopLoading();
   };
@@ -140,6 +158,7 @@ export default function DisplayAnnotateComponents({
               : "Composants identifiés"}
           </h2>
 
+          {/* Header Components */}
           <article>
             <h3>
               {language === "en" ? "Header components" : "Composant d'en-tête"}
@@ -148,14 +167,16 @@ export default function DisplayAnnotateComponents({
               {componentsByCategory.headerComponents.length > 0 ? (
                 <>
                   {componentsByCategory.headerComponents.map(
-                    (component, index) => (
+                    (component: string, index: number): ReactElement => (
                       <li key={index}>
                         <label>{component} : </label>
                         <input
                           type={"text"}
-                          value={inputValues[component] || ""}
-                          onChange={(event) =>
-                            handleInputChange(component, event)
+                          value={inputValues[`${component}-${index}`] || ""}
+                          onChange={(
+                            event: ChangeEvent<HTMLInputElement>,
+                          ): void =>
+                            handleInputChange(`${component}-${index}`, event)
                           }
                         />
                       </li>
@@ -168,6 +189,7 @@ export default function DisplayAnnotateComponents({
             </ul>
           </article>
 
+          {/* Body Components */}
           <article>
             <h3>
               {language === "en" ? "Body components" : "Composant de corps"}
@@ -176,14 +198,16 @@ export default function DisplayAnnotateComponents({
               {componentsByCategory.bodyComponents.length > 0 ? (
                 <>
                   {componentsByCategory.bodyComponents.map(
-                    (component, index) => (
+                    (component: string, index: number): ReactElement => (
                       <li key={index}>
                         <label>{component} : </label>
                         <input
                           type={"text"}
-                          value={inputValues[component] || ""}
-                          onChange={(event) =>
-                            handleInputChange(component, event)
+                          value={inputValues[`${component}-${index}`] || ""}
+                          onChange={(
+                            event: ChangeEvent<HTMLInputElement>,
+                          ): void =>
+                            handleInputChange(`${component}-${index}`, event)
                           }
                         />
                       </li>
@@ -196,6 +220,7 @@ export default function DisplayAnnotateComponents({
             </ul>
           </article>
 
+          {/* Footer Components */}
           <article>
             <h3>
               {language === "en"
@@ -206,14 +231,16 @@ export default function DisplayAnnotateComponents({
               {componentsByCategory.footerComponents.length > 0 ? (
                 <>
                   {componentsByCategory.footerComponents.map(
-                    (component, index) => (
+                    (component: string, index: number): ReactElement => (
                       <li key={index}>
                         <label>{component} : </label>
                         <input
                           type={"text"}
-                          value={inputValues[component] || ""}
-                          onChange={(event) =>
-                            handleInputChange(component, event)
+                          value={inputValues[`${component}-${index}`] || ""}
+                          onChange={(
+                            event: ChangeEvent<HTMLInputElement>,
+                          ): void =>
+                            handleInputChange(`${component}-${index}`, event)
                           }
                         />
                       </li>
@@ -225,6 +252,8 @@ export default function DisplayAnnotateComponents({
               )}
             </ul>
           </article>
+
+          {/* Buttons */}
           <div className={"btnWrapper"}>
             <button type={"button"}>
               {language === "en" ? "Cancel" : "Annuler"}
