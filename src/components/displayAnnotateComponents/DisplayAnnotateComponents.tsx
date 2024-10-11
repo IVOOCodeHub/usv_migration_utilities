@@ -146,6 +146,10 @@ export default function DisplayAnnotateComponents({
     stopLoading();
   };
 
+  const handleCancel: () => void = (): void => {
+    window.location.reload();
+  };
+
   return (
     <>
       {isLoading ? (
@@ -270,7 +274,7 @@ export default function DisplayAnnotateComponents({
 
           {/* Buttons */}
           <div className={"btnWrapper"}>
-            <button type={"button"}>
+            <button type={"button"} onClick={handleCancel}>
               {language === "en" ? "Cancel" : "Annuler"}
             </button>
             <button onClick={handleSubmit}>
