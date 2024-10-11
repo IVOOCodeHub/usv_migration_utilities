@@ -99,7 +99,7 @@ export default function DisplayAnnotateComponents({
   const handleSubmit = async () => {
     startLoading();
 
-    const pageKey: number = (datas as IPageAnnotateToBdd).cle_arbo_usv
+    const pageKey: number = (datas as IPageAnnotateToBdd).cle_arbo_usv;
 
     const updatedDatas = {
       cle_arbo_usv: Number(pageKey),
@@ -110,7 +110,7 @@ export default function DisplayAnnotateComponents({
             index: number,
           ): { component: string; text: string } => ({
             component: componentNameToKey[component] || component,
-            text: inputValues[`${component}-${index}`] || "",
+            text: inputValues[`${component}-header-${index}`] || "",
           }),
         ),
         bodyComponents: componentsByCategory.bodyComponents.map(
@@ -119,7 +119,7 @@ export default function DisplayAnnotateComponents({
             index: number,
           ): { component: string; text: string } => ({
             component: componentNameToKey[component] || component,
-            text: inputValues[`${component}-${index}`] || "",
+            text: inputValues[`${component}-body-${index}`] || "",
           }),
         ),
         footerComponents: componentsByCategory.footerComponents.map(
@@ -128,7 +128,7 @@ export default function DisplayAnnotateComponents({
             index: number,
           ): { component: string; text: string } => ({
             component: componentNameToKey[component] || component,
-            text: inputValues[`${component}-${index}`] || "",
+            text: inputValues[`${component}-footer-${index}`] || "",
           }),
         ),
       },
@@ -168,15 +168,20 @@ export default function DisplayAnnotateComponents({
                 <>
                   {componentsByCategory.headerComponents.map(
                     (component: string, index: number): ReactElement => (
-                      <li key={index}>
+                      <li key={`${component}-header-${index}`}>
                         <label>{component} : </label>
                         <input
                           type={"text"}
-                          value={inputValues[`${component}-${index}`] || ""}
+                          value={
+                            inputValues[`${component}-header-${index}`] || ""
+                          }
                           onChange={(
                             event: ChangeEvent<HTMLInputElement>,
                           ): void =>
-                            handleInputChange(`${component}-${index}`, event)
+                            handleInputChange(
+                              `${component}-header-${index}`,
+                              event,
+                            )
                           }
                         />
                       </li>
@@ -199,15 +204,20 @@ export default function DisplayAnnotateComponents({
                 <>
                   {componentsByCategory.bodyComponents.map(
                     (component: string, index: number): ReactElement => (
-                      <li key={index}>
+                      <li key={`${component}-body-${index}`}>
                         <label>{component} : </label>
                         <input
                           type={"text"}
-                          value={inputValues[`${component}-${index}`] || ""}
+                          value={
+                            inputValues[`${component}-body-${index}`] || ""
+                          }
                           onChange={(
                             event: ChangeEvent<HTMLInputElement>,
                           ): void =>
-                            handleInputChange(`${component}-${index}`, event)
+                            handleInputChange(
+                              `${component}-body-${index}`,
+                              event,
+                            )
                           }
                         />
                       </li>
@@ -232,15 +242,20 @@ export default function DisplayAnnotateComponents({
                 <>
                   {componentsByCategory.footerComponents.map(
                     (component: string, index: number): ReactElement => (
-                      <li key={index}>
+                      <li key={`${component}-footer-${index}`}>
                         <label>{component} : </label>
                         <input
                           type={"text"}
-                          value={inputValues[`${component}-${index}`] || ""}
+                          value={
+                            inputValues[`${component}-footer-${index}`] || ""
+                          }
                           onChange={(
                             event: ChangeEvent<HTMLInputElement>,
                           ): void =>
-                            handleInputChange(`${component}-${index}`, event)
+                            handleInputChange(
+                              `${component}-footer-${index}`,
+                              event,
+                            )
                           }
                         />
                       </li>
